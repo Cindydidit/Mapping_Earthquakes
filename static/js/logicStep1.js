@@ -1,4 +1,4 @@
-
+// Create a map with all recorded earthquakes from the past seven days.
 // Add console.log to check to see if our code is working.
 console.log("working");
 
@@ -24,10 +24,10 @@ let baseMaps = {
 
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
-  center: [43.07, -79.3],
-  zoom: 11,
-  layers:[satelliteStreets]
-})
+  center: [39.5, -98.5],
+  zoom: 3,
+  layers:[streets]
+});
 
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps).addTo(map);
@@ -35,8 +35,15 @@ L.control.layers(baseMaps).addTo(map);
 // Then we add our 'graymap' tile layer to the map.
 streets.addTo(map);
 
-// Accessing the Toronto neighborhoods GeoJSON URL.
-let torontoHoods = "https://raw.githubusercontent.com/Cindydidit/Mapping_Earthquakes/main/torontoNeighborhoods.json";
+// Retrieve the earthquake GeoJSON data.
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
+  // Creating a GeoJSON layer with the retrieved data.
+  L.geoJSON(data).addTo(map);
+});
+
+
+// // Accessing the Toronto neighborhoods GeoJSON URL.
+// let torontoHoods = "https://raw.githubusercontent.com/Cindydidit/Mapping_Earthquakes/main/torontoNeighborhoods.json";
 
 // // Accessing the airport GeoJSON URL
 // let airportData = "https://raw.githubusercontent.com/Cindydidit/Mapping_Earthquakes/main/majorAirports.json";
@@ -57,9 +64,9 @@ let myStyle = {
   weight: 2
 }
 
-// Grabbing our GeoJSON data.
-d3.json(torontoHoods).then(function(data) {
-  console.log(data);
+// // Grabbing our GeoJSON data.
+// d3.json(torontoHoods).then(function(data) {
+//   console.log(data);
 
 // Creating a GeoJSON layer with the retrieved data.
 L.geoJson(data, {
@@ -69,30 +76,30 @@ L.geoJson(data, {
   }
 })
 .addTo(map);
-});
+// });
 
-// Add GeoJSON data.
-let sanFranAirport =
-{"type":"FeatureCollection","features":[{
-    "type":"Feature",
-    "properties":{
-        "id":"3469",
-        "name":"San Francisco International Airport",
-        "city":"San Francisco",
-        "country":"United States",
-        "faa":"SFO",
-        "icao":"KSFO",
-        "alt":"13",
-        "tz-offset":"-8",
-        "dst":"A",
-        "tz":"America/Los_Angeles"},
-        "geometry":{
-            "type":"Point",
-            "coordinates":[-122.375,37.61899948120117]}}
-]};
+// // Add GeoJSON data.
+// let sanFranAirport =
+// {"type":"FeatureCollection","features":[{
+//     "type":"Feature",
+//     "properties":{
+//         "id":"3469",
+//         "name":"San Francisco International Airport",
+//         "city":"San Francisco",
+//         "country":"United States",
+//         "faa":"SFO",
+//         "icao":"KSFO",
+//         "alt":"13",
+//         "tz-offset":"-8",
+//         "dst":"A",
+//         "tz":"America/Los_Angeles"},
+//         "geometry":{
+//             "type":"Point",
+//             "coordinates":[-122.375,37.61899948120117]}}
+// ]};
 
-// Grabbing our GeoJSON data.
-L.geoJSON(torontoHoods).addTo(map);
+// // Grabbing our GeoJSON data.
+// L.geoJSON(torontoHoods).addTo(map);
 
 // // The pointToLayer Function
 // // Grabbing our GeoJSON data.
@@ -107,12 +114,12 @@ L.geoJSON(torontoHoods).addTo(map);
 
 // The onEachFeature Function
 // Grabbing our GeoJSON data.
-L.geoJson(torontoHoods, {
-  onEachFeature: function(feature, layer) {
-    console.log(layer);
-    layer.bindPopup();
-   }
-}).addTo(map);
+// L.geoJson(torontoHoods, {
+//   onEachFeature: function(feature, layer) {
+//     console.log(layer);
+//     layer.bindPopup();
+//    }
+// }).addTo(map);
 
 // Coordinates for each point to be used in the line.
 // let line = [
