@@ -121,7 +121,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   allEarthquakes.addTo(map);
 
 // 3. Retrieve the major earthquake GeoJSON data >4.5 mag for the week.
-d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson").then(function(data) {
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson").then(function(majorEarthquakedata) {
 
 // 4. Use the same style as the earthquake data.
 function styleInfo(feature) {
@@ -141,7 +141,10 @@ function getColor(magnitude) {
   if (magnitude > 6) {
     return "darkred";
   }
-  if (magnitude < 5) {
+  if (magnitude > 5) {
+    return "#ea2c2c";
+  }
+  if (magnitude > 4) {
     return "#ea822c";
   }
   return "#98ee00";
@@ -158,7 +161,7 @@ function getRadius(magnitude) {
 // 7. Creating a GeoJSON layer with the retrieved data that adds a circle to the map 
 // sets the style of the circle, and displays the magnitude and location of the earthquake
 //  after the marker has been created and styled.
-L.geoJson(majorEarthquakedata, {
+L.geoJson(majorEarthquakedata,{
   pointToLayer: function(feature, latlng) {
     console.log(majorEarthquakedata);
     return L.circleMarker(latlng);
@@ -166,7 +169,7 @@ L.geoJson(majorEarthquakedata, {
   style: styleInfo,
   onEachFeature: function(feature, layer) {
     layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
-}
+  }
 }).addTo(majorEarthquakes);
 
 // 8. Add the major earthquakes layer to the map.
@@ -215,12 +218,12 @@ legend.onAdd = function() {
     // pass data to geoJSON() layer:
     L.geoJson(tectonicData, {
       color: "orange",
-      weight: 2.5,
+      weight: 2,
     }).addTo(tectonicPlates);
-  
+  });
     // add the tectonic layer group to the map:
     tectonicPlates.addTo(map);
     
-   });
+   
  
 });
